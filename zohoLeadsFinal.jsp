@@ -1,0 +1,176 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+     <title> Zoho Implicit Grant Type Example</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/CodeFlask.js/0.1.1/codeflask.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js" async></script>
+ 
+      
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" async></script>
+    </head>
+    <body>
+    <p id="un-authenticated-msg" style="display:none;">
+        You are currently not logged in, please click the button below to log in!
+        <br>
+        <button type="button" onclick="authorize()">Log in</button>
+    </p>
+    
+    <p id="authenticated-msg" style="display:none;">
+        Your access token is:
+    </p>
+    <p id="make-call-msg" style="display:none;">
+        Please try making an api call by clicking the button below!
+    </p>
+    <br>
+    <br>
+    <div id='crmWebToEntityForm'>
+       <META HTTP-EQUIV ='content-type' CONTENT='text/html;charset=UTF-8'>
+       <form name=myForm >
+        <table >
+    <tr>
+                        <td colspan='2' ><strong>Affiliate Details</strong> </td>
+    </tr>
+ <br></br>
+ 
+<tr>
+                     <td  >First Name<span style='color:red;'>*</span> </td>
+                     <td style='width:250px;'><input type='text' id="fname" ' name='firstName' /> </td>
+ </tr>
+ <tr>
+                       <td >Last Name<span style='color:red;'>*</span> </td>
+                       <td > <input type='text' id="lname"  name='lastName' /></td>
+ </tr>
+  <tr>
+                          <td >Email</td>
+                          <td  ><input type='email' id="email"  name='mail' /></td>
+</tr>
+  <tr>
+                             <td  >No of Referrals</td>
+                            <td  ><input type='text' id="referrals" name='ref' /></td>
+ </tr>
+  <tr>
+                                <td >URL Parameter</td>
+                              <td ><input type='text' id="url"   name='urlParameter' /></td>
+    </tr>
+    <tr>
+                          <td >Website</td>
+                         <td style='width:250px;' ><input type='text' id="website" name='site' /></td>
+</tr>
+    
+  <tr>
+                                     <td colspan='2' >
+                                    <input  id='formsubmit' type='button' onclick="   insertRecords()" value='Submit' ></input> 
+                                    <input type='reset' name='reset'value='Reset' ></input> 
+        </td>
+    </tr>
+    </table>
+ 
+<script >
+               
+                // Settings for the script, you MUST fill the CLIENT DETAILS
+                var settings = {
+                    client_id: "1000.**********************", //CLIENT ID GOT FROM DEVELOPER CONSOLE
+                    callback_url: "http://amitanand9799.000webhostapp.com/****.jsp", //REDIRECT URL REGISTERED IN DEVELOPER CONSOLE
+                    scope: "ZohoCRM.modules.custom.all,ZohoCRM.modules.contacts.all,ZohoCRM.modules.accounts.all,ZohoCRM.modules.deals.all,ZohoCRM.modules.events.all,ZohoCRM.modules.tasks.all,ZohoCRM.modules.calls.all,ZohoCRM.modules.invoices.all,ZohoCRM.modules.pricebooks.all,ZohoCRM.modules.salesorders.all,ZohoCRM.modules.purchaseorders.all,ZohoCRM.modules.products.all,ZohoCRM.modules.cases.all,ZohoCRM.modules.solutions.all,ZohoCRM.modules.vendors.all,ZohoCRM.modules.quotes.all,ZohoCRM.modules.ALL,ZohoCRM.settings.ALL,ZohoCRM.users.ALL,ZohoCRM.org.ALL,aaaserver.profile.ALL,ZohoCRM.settings.functions.all,ZohoCRM.functions.execute.read,ZohoCRM.functions.execute.create,ZohoCRM.settings.layout_rules.read,ZohoCRM.notifications.all" //SCOPE OF THE API YOU WISH TO ACCESS
+                };
+    
+                var token;
+    
+                window.onload = function() {
+                    // Try to get the token from the URL
+                    token = getToken();
+                    // If the token has been given so change the display
+                    if (token) {
+                   
+                        document.getElementById('authenticated-msg').innerHTML += token;
+                        document.getElementById('authenticated-msg').style.display = "block";
+                        document.getElementById('make-call-msg').style.display = "block";
+                    } else { // Else we haven't been authorized yet
+                        document.getElementById('un-authenticated-msg').style.display = "block";
+                    }
+                }
+    
+                // Parses the URL parameters and returns an object
+                function parseParms(str) {
+                    var pieces = str.split("&"), data = {}, i, parts;
+                    // process each query pair
+                    for (i = 0; i < pieces.length; i++) {
+                        parts = pieces[i].split("=");
+                        if (parts.length < 2) {
+                            parts.push("");
+                        }
+                        data[decodeURIComponent(parts[0])] = decodeURIComponent(parts[1]);
+                    }
+                    return data;
+                }
+    
+                // Returns the token from the URL hash
+                function getToken() {
+                    //substring(1) to remove the '#'
+                    hash = parseParms(document.location.hash.substring(1));
+                    return hash.access_token;
+                }
+    
+                // Send the user to the authorize endpoint for login and authorization
+                function authorize() {
+                    window.location = "https://accounts.zoho.com/oauth/v2/auth?response_type=token&client_id="+ settings.client_id + "&redirect_uri=" + settings.callback_url +"&prompt=consent&scope=" + settings.scope;
+                }
+
+          var fname = document.forms['myForm']['firstName'].value;
+          
+            
+
+
+      function insertRecords(){
+                           var fname = document.forms['myForm']['firstName'].value;
+                    var lname =document.forms['myForm']['lastName'].value;
+                 var mymail = document.forms['myForm']['mail'].value;
+                  var myRefe = document.forms['myForm']['ref'].value;
+                  var myurl = document.forms['myForm']['urlParameter'].value;
+                  var mySite = document.forms['myForm']['site'].value;
+ 
+        console.log(lname);
+      //INSERT RECORDS
+console.log(token);
+ var settings = {       
+
+  "async": true,
+  "crossDomain": true,
+  "url": "https://www.zohoapis.com/crm/v2/Leads",
+  "method": "POST",
+   "dataType": "json",
+    "cors": "true",
+  "headers": {
+    "Content-Type": "application/json",
+
+    "Authorization": "Zoho-oauthtoken " + token,
+
+    "Accept": "*/*",
+
+
+
+  },
+ "processData": false,
+  "data":  "{\r\n" + 
+               "\"data\":[ \r\n " +
+               "{\r\n"           +
+               "\"First_Name\": \"" + fname + "\",\r\n"   +
+                "\"Last_Name\": \"" + lname + "\",\r\n"   +
+                 "\"Email\": \"" + mymail + "\",\r\n"   +
+                   "\"No_of_Referrals\": \"" + myRefe + "\",\r\n"   +
+                      "\"Website\": \"" + mySite + "\",\r\n"   +
+              "}\r\n"         +
+               "]\r\n"    +
+               "}" 
+}
+
+$.ajax(settings).done(function (response) {
+  console.log(response);
+});
+       }
+            </script>
+        </form>
+    </div>
+    </body>
+    </html>
